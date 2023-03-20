@@ -29,7 +29,7 @@ public class myController : MonoBehaviour
         GetInput();
         HandleMotor();
         HandleSteering();
-        //UpdateWheels();
+        UpdateWheels();
     }
 
     private void GetInput()
