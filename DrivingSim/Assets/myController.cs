@@ -48,14 +48,16 @@ public class myController : MonoBehaviour
 
     private void HandleMotor()
     {
-        frontLeftWheelCollider.motorTorque = -verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = -verticalInput * motorForce;
+        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
 
-        brakeForce = isBreaking ? 3000f : 0f;
-        frontLeftWheelCollider.brakeTorque = brakeForce;
-        frontRightWheelCollider.brakeTorque = brakeForce;
-        rearLeftWheelCollider.brakeTorque = brakeForce;
-        rearRightWheelCollider.brakeTorque = brakeForce;
+        float brakeTorque = isBreaking ? brakeForce : 0f;
+        Debug.Log(brakeTorque);
+
+        frontLeftWheelCollider.brakeTorque = brakeTorque;
+        frontRightWheelCollider.brakeTorque = brakeTorque;
+        rearLeftWheelCollider.brakeTorque = brakeTorque;
+        rearRightWheelCollider.brakeTorque = brakeTorque;
     }
 
     private void UpdateWheels()
@@ -77,7 +79,6 @@ public class myController : MonoBehaviour
         // Set wheel transform state
         mesh.transform.rotation = rot;
         mesh.transform.position = pos;
-        // mesh.transform.SetPositionAndRotation(pos, rot);
     }
 
 }
