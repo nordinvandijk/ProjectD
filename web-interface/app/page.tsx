@@ -1,6 +1,5 @@
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import { supabase } from "@/utils/supabase";
+import { useEffect } from "react";
 
 export default function Home() {
   return <main></main>;
