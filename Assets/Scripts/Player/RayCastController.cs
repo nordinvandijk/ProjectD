@@ -6,6 +6,7 @@ public class RayCastController : MonoBehaviour
 {
   
     public GameObject UI;
+    public int distance;
 
     void Start()
     {
@@ -26,8 +27,14 @@ public class RayCastController : MonoBehaviour
                 hit.transform.gameObject.GetComponent<Renderer>().material.color = Color.red;
                 //log the coordinates of the object that is hit and display textbox by the object that is hit and clicked for the user to read the information of the object
                 Debug.Log("Hit at " + hit.point);
-                UI.SetActive(true);
+                
+                //anchor the UI to the object that is hit and clicked
                 UI.transform.position = hit.transform.position;
+                UI.transform.rotation = hit.transform.rotation;
+
+                //display the UI
+                
+                UI.SetActive(true);
             }
             
         }
