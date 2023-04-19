@@ -11,6 +11,7 @@ public class TargetFollowMovement : MonoBehaviour
     private Quaternion nextRotation;
     public float rotationPower = 3f;
     public float rotationLerp = 0.5f;
+    public Canvas recticle;
 
     public GameObject driveCamera;
     public GameObject aimCamerara;
@@ -19,16 +20,23 @@ public class TargetFollowMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             if (isAiming)
             {
                 target.rotation = car.rotation;
+                recticle.enabled = false;
+            }
+            else
+            {
+                recticle.enabled = true;
             }
             isAiming = !isAiming;
         }
@@ -45,11 +53,11 @@ public class TargetFollowMovement : MonoBehaviour
             // xRotationCamera -= mouseVertical;
             // xRotationCamera = Mathf.Clamp(xRotationCamera, -90f, 90f);
 
-            //transform.localRotation = Quaternion.Euler(xRotationCamera, -90f, 90f);
-            //Target.Rotate(Vector3.up * mouseHorizontal);
+            // transform.localRotation = Quaternion.Euler(xRotationCamera, -90f, 90f);
+            // Target.Rotate(Vector3.up * mouseHorizontal);
 
             target.transform.rotation *= Quaternion.AngleAxis(mouseHorizontal, Vector3.up);
-            target.transform.rotation *= Quaternion.AngleAxis(mouseVertical, Vector3.right);
+            target.transform.rotation *= Quaternion.AngleAxis(mouseVertical, Vector3.left);
 
             var angles = target.transform.localEulerAngles;
             angles.z = 0;
@@ -57,9 +65,9 @@ public class TargetFollowMovement : MonoBehaviour
             var angle = target.transform.localEulerAngles.x;
 
             //Clamp the Up/Down rotation
-            if (angle > 180 && angle < 340)
+            if (angle > 180 && angle < 345)
             {
-                angles.x = 340;
+                angles.x = 345;
             }
             else if (angle < 180 && angle > 40)
             {
