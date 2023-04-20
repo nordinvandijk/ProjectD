@@ -5,53 +5,46 @@ using UnityEngine;
 public class RayCastController : MonoBehaviour
 {
   
+    //raycast from mouse position
+
+    public Camera cam;
     public GameObject UI;
-    public int distance;
+    
 
     void Start()
     {
         UI.SetActive(false);
-    }
+    }	
 
     void Update()
     {
-        RaycastHit hit;
-        // Does the ray intersect any objects excluding the player layer
-
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, Mathf.Infinity))
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
-            //Change the color of the object that is hit and clicked
-            if (Input.GetMouseButtonDown(0) && hit.transform.gameObject.tag == "Interactable")
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
             {
-                hit.transform.gameObject.GetComponent<Renderer>().material.color = Color.red;
-                //log the coordinates of the object that is hit and display textbox by the object that is hit and clicked for the user to read the information of the object
-                Debug.Log("Hit at " + hit.point);
-                
-                //anchor the UI to the object that is hit and clicked
-                UI.transform.position = hit.transform.position;
-                UI.transform.rotation = hit.transform.rotation;
-
-                //display the UI
-                
-                UI.SetActive(true);
+                if (hit.collider.gameObject.tag == "Interactable")
+                {
+                    hit.collider.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    UI.SetActive(true);
+                }
             }
-            
         }
-        else
+        if (Input.GetMouseButtonDown(1))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * 1000, Color.white);
-            Debug.Log("Did not Hit");
-            UI.SetActive(false);
-            
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject.tag == "Interactable")
+                {
+                    hit.collider.gameObject.GetComponent<Renderer>().material.color = Color.white;
+                    UI.SetActive(false);
+                }
+            }
         }
-    }
- 
-    //draw the ray in the scene view for debugging purposes backwords
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * 1000);
-    }
-    
+    }   
 }
