@@ -52,7 +52,7 @@ public class myController : MonoBehaviour
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
 
         float brakeTorque = isBreaking ? brakeForce : 0f;
-        Debug.Log(brakeTorque);
+        // Debug.Log(brakeTorque);
 
         frontLeftWheelCollider.brakeTorque = brakeTorque;
         frontRightWheelCollider.brakeTorque = brakeTorque;
