@@ -7,7 +7,7 @@ public class TargetFollowMovement : MonoBehaviour
     public Transform target;
     public Transform car;
     public float mouseSensitivity;
-    private float xRotationCamera = 0f;
+    //private float xRotationCamera = 0f;
     private Quaternion nextRotation;
     public float rotationPower = 3f;
     public float rotationLerp = 0.5f;
@@ -27,7 +27,7 @@ public class TargetFollowMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             if (isAiming)
             {
