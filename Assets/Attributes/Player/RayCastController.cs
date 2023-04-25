@@ -1,6 +1,7 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class RayCastController : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class RayCastController : MonoBehaviour
 
     public Camera cam;
     public GameObject UI;
-    public bool isTargeted; 
+    public TextMeshProUGUI text;
+    private bool isTargeted = false; 
     private GameObject Hit = null;
   
     void Start()
@@ -31,17 +33,16 @@ public class RayCastController : MonoBehaviour
                     {
                         Hit = hit.collider.gameObject;
                         hit.collider.gameObject.GetComponent<Renderer>().material.color = Color.red;
-                        //change ui text to object name, width height and coordinates
+                        text.text = "Name: " + Hit.name + "\n" + "Position: " + Hit.transform.position + "\n" + "Height: " + Hit.transform.localScale.y + "\n" + "Width: " + Hit.transform.localScale.x;
                         UI.SetActive(true);
-                        UI.transform.GetChild(0).gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = "Name: " + hit.collider.gameObject.name + "\n" + "Width: " + hit.collider.gameObject.transform.localScale.x + "\n" + "Height: " + hit.collider.gameObject.transform.localScale.y + "\n" + "Coordinates: " + hit.collider.gameObject.transform.position;
-                        isTargeted = true;
-                        
+                        isTargeted = true; 
                     }
                 }
             
             }
             if (Input.GetMouseButtonDown(1) && Hit != null)
             {
+                text.text = "";
                 Hit.GetComponent<Renderer>().material.color = Color.white;
                 isTargeted = false;
                 UI.SetActive(false);
