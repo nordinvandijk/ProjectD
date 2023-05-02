@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 90b53da566052a74ab5a39621b328d40
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/Raycast.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}

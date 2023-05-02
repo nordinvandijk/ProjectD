@@ -1,51 +1,86 @@
- using System.Collections;
-using System.Collections.Generic;
+using CesiumForUnity;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class RayCastController : MonoBehaviour
 {
-  
+
     //raycast from mouse position
 
     public Camera cam;
-    public GameObject UI;
-    public TextMeshProUGUI text;
-    private bool isTargeted = false; 
+    //public GameObject UI;
+    //public TextMeshProUGUI text;
+    private bool isTargeted = false;
     private GameObject Hit = null;
-  
+
+    // The GameObject with the UI to enable / disable depending on
+    // whether metadata has been picked.
+    public GameObject metadataPanel;
+
+    // The text to display the metadata properties.
+    public Text metadataText;
+
     void Start()
     {
-        UI.SetActive(false);
-    }	
+        //UI.SetActive(false);
+
+        // Fix the cursor to the center of the screen and hide it.
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        if (metadataPanel != null)
+        {
+            metadataPanel.SetActive(false);
+        }
+    }
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(0) && isTargeted == false)
+        {
+            metadataText.text = "";
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-            if (Input.GetMouseButtonDown(0) && isTargeted == false)
+            if (Physics.Raycast(
+            Camera.main.transform.position,
+            Camera.main.transform.TransformDirection(Vector3.forward),
+            out hit,
+            Mathf.Infinity))
             {
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit))
+                CesiumMetadata metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
+                if (metadata != null)
                 {
-                    if (hit.collider.gameObject.tag == "Interactable")
+                    CesiumFeature[] features = metadata.GetFeatures(hit.transform, hit.triangleIndex);
+                    // List out each metadata property in the UI.
+                    foreach (var feature in features)
                     {
-                        Hit = hit.collider.gameObject;
-                        hit.collider.gameObject.GetComponent<Renderer>().material.color = Color.red;
-                        text.text = "Name: " + Hit.name + "\n" + "Position: " + Hit.transform.position + "\n" + "Height: " + Hit.transform.localScale.y + "\n" + "Width: " + Hit.transform.localScale.x;
-                        UI.SetActive(true);
-                        isTargeted = true; 
+                        foreach (var propertyName in feature.properties)
+                        {
+                            string propertyValue = feature.GetString(propertyName, "null");
+                            if (propertyValue != "null" && propertyValue != "")
+                            {
+                                metadataText.text += "<b>" + propertyName + "</b>" + ": "
+                                    + propertyValue + "\n";
+                            }
+                        }
                     }
                 }
-            
             }
-            if (Input.GetMouseButtonDown(1) && Hit != null)
-            {
-                text.text = "";
-                Hit.GetComponent<Renderer>().material.color = Color.white;
-                isTargeted = false;
-                UI.SetActive(false);
-            }
+
         }
-} 
+
+        if (metadataPanel != null)
+        {
+            metadataPanel.SetActive(metadataText.text.Length > 0);
+        }
+
+        // if (Input.GetMouseButtonDown(1) && Hit != null)
+        // {
+        //     text.text = "";
+        //     Hit.GetComponent<Renderer>().material.color = Color.white;
+        //     isTargeted = false;
+        //     UI.SetActive(false);
+        // }
+    }
+}
