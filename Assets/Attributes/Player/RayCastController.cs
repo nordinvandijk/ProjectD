@@ -11,7 +11,7 @@ public class RayCastController : MonoBehaviour
     //public GameObject UI;
     //public TextMeshProUGUI text;
     private bool isTargeted = false;
-    private GameObject Hit = null;
+    // private GameObject Hit = null;
 
     // The GameObject with the UI to enable / disable depending on
     // whether metadata has been picked.
