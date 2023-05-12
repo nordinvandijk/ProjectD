@@ -317,6 +317,8 @@ GameObject:
   - component: {fileID: 2217852157179541872}
   - component: {fileID: 9037564143938275577}
   - component: {fileID: 1692037737325340285}
+  - component: {fileID: 147282800683875412}
+  - component: {fileID: 863016723760654666}
   m_Layer: 0
   m_Name: WalkingPlayer (1)
   m_TagString: Player
@@ -384,3 +386,31 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   orientation: {fileID: 5139324843972296205}
+--- !u!114 &147282800683875412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6849265773999754380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a588931ae00ceb4e9d226f8195af809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  metadataPanel: {fileID: 0}
+  metadataText: {fileID: 0}
+--- !u!114 &863016723760654666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6849265773999754380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc162822f5d002499b037c14a02805d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Recticle: {fileID: 0}

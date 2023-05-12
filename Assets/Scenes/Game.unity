@@ -790,6 +790,11 @@ MonoBehaviour:
   recticle: {fileID: 1666017894}
   driveCamera: {fileID: 561865406}
   aimCamerara: {fileID: 772981543}
+--- !u!20 &1187802407 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1099724585091171388, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
+  m_PrefabInstance: {fileID: 8415432991639398753}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1289098187
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +894,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 6301679752699413378}
   player2: {fileID: 291660197}
+  aimCamera: {fileID: 772981543}
+  UI: {fileID: 1666017894}
 --- !u!4 &1396842349
 Transform:
   m_ObjectHideFlags: 0
@@ -2255,6 +2262,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 147282800683875412, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1187802407}
+    - target: {fileID: 147282800683875412, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
+      propertyPath: metadataText
+      value: 
+      objectReference: {fileID: 1972011747}
+    - target: {fileID: 147282800683875412, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
+      propertyPath: metadataPanel
+      value: 
+      objectReference: {fileID: 684187158}
+    - target: {fileID: 863016723760654666, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
+      propertyPath: Recticle
+      value: 
+      objectReference: {fileID: 1666017894}
     - target: {fileID: 2217852157179541872, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2311,7 +2334,8 @@ PrefabInstance:
       propertyPath: m_AngularDrag
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 863016723760654666, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ff1d498874676a54c9fb9cfb7141887b, type: 3}
 --- !u!33 &8891840798628690850
 MeshFilter:
