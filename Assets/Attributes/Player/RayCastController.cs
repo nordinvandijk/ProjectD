@@ -1,9 +1,18 @@
+using System;
 using CesiumForUnity;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using Attributes.Player;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
+using Unity.Mathematics;
+using System.Linq;
 
 public class RayCastController : MonoBehaviour
 {
+    private List<Building> buildings;
 
     //raycast from mouse position
 
@@ -22,6 +31,7 @@ public class RayCastController : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(FetchBuildings());
         //UI.SetActive(false);
 
         // Fix the cursor to the center of the screen and hide it.
@@ -48,6 +58,21 @@ public class RayCastController : MonoBehaviour
             out hit,
             Mathf.Infinity))
             {
+                CesiumGeoreference georeference = hit.transform.GetComponentInParent<CesiumGeoreference>();
+                double3 unityPosition = new double3(hit.transform.position);
+                double3 ecef = georeference.TransformUnityPositionToEarthCenteredEarthFixed(unityPosition);
+                double3 lonLatHeight = CesiumWgs84Ellipsoid.EarthCenteredEarthFixedToLongitudeLatitudeHeight(ecef);
+                double longitude = lonLatHeight.x;
+                double latitude = lonLatHeight.y;
+
+                var selectedBuilding = buildings.Find(b => Math.Round(b.Lon, 9, MidpointRounding.ToEven)  == Math.Round(longitude, 9, MidpointRounding.ToEven)
+                                                           && Math.Round(b.Lat, 9, MidpointRounding.ToEven) == Math.Round(latitude, 9, MidpointRounding.ToEven));
+
+                if (selectedBuilding is not null)
+                {
+                    Debug.Log("KANKER NICE");
+                }
+
                 CesiumMetadata metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
                 if (metadata != null)
                 {
@@ -61,7 +86,7 @@ public class RayCastController : MonoBehaviour
                             if (propertyValue != "null" && propertyValue != "")
                             {
                                 metadataText.text += "<b>" + propertyName + "</b>" + ": "
-                                    + propertyValue + "\n";
+                                                     + propertyValue + "\n";
                             }
                         }
                     }
@@ -82,5 +107,23 @@ public class RayCastController : MonoBehaviour
         //     isTargeted = false;
         //     UI.SetActive(false);
         // }
+    }
+
+    private IEnumerator FetchBuildings()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get("https://bnxikyhccjojmjjawofa.supabase.co/rest/v1/buildings?select=*"))
+        {
+            request.SetRequestHeader("apikey",
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJueGlreWhjY2pvam1qamF3b2ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE3NTk4ODQsImV4cCI6MTk5NzMzNTg4NH0.VCxMTJhWS7G-66kTY6DidyQyItIc8ariyT1hTYRy08k");
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(request.error);
+            }
+            else
+            {
+                buildings = JsonConvert.DeserializeObject<List<Building>>(request.downloadHandler.text);
+            }
+        }
     }
 }
