@@ -23,6 +23,7 @@ public class myController : MonoBehaviour
     public float maxSteeringAngle = 30f;
     public float motorForce = 1000f;
     public float brakeForce = 0f;
+    public float steerDecay = 1f;
 
     private void FixedUpdate()
     {
@@ -41,7 +42,16 @@ public class myController : MonoBehaviour
 
     private void HandleSteering()
     {
-        steerAngle = maxSteeringAngle * horizontalInput;
+        steerAngle += horizontalInput;
+        if (horizontalInput == 0) {
+            if (steerAngle > 0) {
+                steerAngle -= steerDecay;
+            }
+            if (steerAngle < 0) {
+                steerAngle += steerDecay;
+            }
+        }
+        steerAngle = Math.Clamp(steerAngle, -maxSteeringAngle, maxSteeringAngle);
         frontLeftWheelCollider.steerAngle = steerAngle;
         frontRightWheelCollider.steerAngle = steerAngle;
     }

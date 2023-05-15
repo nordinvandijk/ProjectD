@@ -1,20 +1,20 @@
+using System;
 using CesiumForUnity;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using Attributes.Player;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
+using Unity.Mathematics;
+using static TerrainManager;
 
 public class RayCastController : MonoBehaviour
 {
-
-    //raycast from mouse position
-
     public Camera cam;
-    //public GameObject UI;
-    //public TextMeshProUGUI text;
     private bool isTargeted = false;
-    // private GameObject Hit = null;
-
-    // The GameObject with the UI to enable / disable depending on
-    // whether metadata has been picked.
+    private GameObject Hit = null;
     public GameObject metadataPanel;
 
     // The text to display the metadata properties.
@@ -48,6 +48,21 @@ public class RayCastController : MonoBehaviour
             out hit,
             Mathf.Infinity))
             {
+                CesiumGeoreference georeference = hit.transform.GetComponentInParent<CesiumGeoreference>();
+                double3 unityPosition = new double3(hit.transform.position);
+                double3 ecef = georeference.TransformUnityPositionToEarthCenteredEarthFixed(unityPosition);
+                double3 lonLatHeight = CesiumWgs84Ellipsoid.EarthCenteredEarthFixedToLongitudeLatitudeHeight(ecef);
+                double longitude = lonLatHeight.x;
+                double latitude = lonLatHeight.y;
+
+                var selectedBuilding = buildings.Find(b => Math.Round(b.Lon, 9, MidpointRounding.ToEven)  == Math.Round(longitude, 9, MidpointRounding.ToEven)
+                                                           && Math.Round(b.Lat, 9, MidpointRounding.ToEven) == Math.Round(latitude, 9, MidpointRounding.ToEven));
+
+                if (selectedBuilding is not null)
+                {
+                    metadataText.text += $"Name: {selectedBuilding.Name}\nDescription: {selectedBuilding.Description}\nLongitude: {selectedBuilding.Lon}\nLatitude: {selectedBuilding.Lat}\n\n";
+                }
+
                 CesiumMetadata metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
                 if (metadata != null)
                 {
@@ -61,7 +76,7 @@ public class RayCastController : MonoBehaviour
                             if (propertyValue != "null" && propertyValue != "")
                             {
                                 metadataText.text += "<b>" + propertyName + "</b>" + ": "
-                                    + propertyValue + "\n";
+                                                     + propertyValue + "\n";
                             }
                         }
                     }
