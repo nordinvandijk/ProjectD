@@ -25,9 +25,9 @@ public class TargetFollowMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (isAiming)
             {
@@ -40,10 +40,14 @@ public class TargetFollowMovement : MonoBehaviour
             }
             isAiming = !isAiming;
         }
+    }
+
+    // Fixed Update is called once per specific rate
+    void FixedUpdate()
+    {
 
         aimCamerara.SetActive(isAiming);
         driveCamera.SetActive(!isAiming);
-
 
         if (isAiming)
         {
@@ -73,7 +77,6 @@ public class TargetFollowMovement : MonoBehaviour
             {
                 angles.x = 40;
             }
-
 
             target.transform.localEulerAngles = angles;
 
