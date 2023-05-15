@@ -12,16 +12,9 @@ using static TerrainManager;
 
 public class RayCastController : MonoBehaviour
 {
-    //raycast from mouse position
-
     public Camera cam;
-    //public GameObject UI;
-    //public TextMeshProUGUI text;
     private bool isTargeted = false;
     private GameObject Hit = null;
-
-    // The GameObject with the UI to enable / disable depending on
-    // whether metadata has been picked.
     public GameObject metadataPanel;
 
     // The text to display the metadata properties.
