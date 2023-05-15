@@ -8,12 +8,10 @@ using Attributes.Player;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Unity.Mathematics;
-using System.Linq;
+using static TerrainManager;
 
 public class RayCastController : MonoBehaviour
 {
-    private List<Building> buildings;
-
     //raycast from mouse position
 
     public Camera cam;
@@ -31,7 +29,6 @@ public class RayCastController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(FetchBuildings());
         //UI.SetActive(false);
 
         // Fix the cursor to the center of the screen and hide it.
@@ -70,7 +67,7 @@ public class RayCastController : MonoBehaviour
 
                 if (selectedBuilding is not null)
                 {
-                    Debug.Log("KANKER NICE");
+                    metadataText.text += $"Name: {selectedBuilding.Name}\nDescription: {selectedBuilding.Description}\nLongitude: {selectedBuilding.Lon}\nLatitude: {selectedBuilding.Lat}\n\n";
                 }
 
                 CesiumMetadata metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
@@ -107,23 +104,5 @@ public class RayCastController : MonoBehaviour
         //     isTargeted = false;
         //     UI.SetActive(false);
         // }
-    }
-
-    private IEnumerator FetchBuildings()
-    {
-        using (UnityWebRequest request = UnityWebRequest.Get("https://bnxikyhccjojmjjawofa.supabase.co/rest/v1/buildings?select=*"))
-        {
-            request.SetRequestHeader("apikey",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJueGlreWhjY2pvam1qamF3b2ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE3NTk4ODQsImV4cCI6MTk5NzMzNTg4NH0.VCxMTJhWS7G-66kTY6DidyQyItIc8ariyT1hTYRy08k");
-            yield return request.SendWebRequest();
-            if (request.result == UnityWebRequest.Result.ConnectionError)
-            {
-                Debug.Log(request.error);
-            }
-            else
-            {
-                buildings = JsonConvert.DeserializeObject<List<Building>>(request.downloadHandler.text);
-            }
-        }
     }
 }
