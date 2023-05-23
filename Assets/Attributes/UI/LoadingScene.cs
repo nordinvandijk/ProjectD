@@ -8,23 +8,41 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using static ScenesManager;
 using static  TerrainManager;
+using TMPro;
+using TextMeshProGUI = TMPro.TextMeshProUGUI;
+
+
 
 public class LoadingScene : MonoBehaviour
 {
-    public GameObject LoadingScreen;
-    public Image LoadingBarFill;
+    //wait for given amount of seconds to load the next scene
+    //show progress for the seconds to the user
+    //the progress bar should be filled in the given amount of seconds and not before that 
 
-    private void OnEnable()
+
+    public TextMeshProUGUI progressText;
+    public Slider slider;
+
+    public int waitForSeconds;
+
+    private void Start()
     {
-        LoadScene();
+        StartCoroutine(LoadScene());
     }
 
-    private void LoadScene()
+    IEnumerator LoadScene()
     {
-        float progressLoadingBuildings = 0;
-        float progressLoadingScene = 0;
-
-        StartCoroutine(FetchBuildings());
-        StartCoroutine(WaitFetchBuildings());
+        yield return new WaitForSeconds(waitForSeconds);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+            slider.value = progress;
+            progressText.text = progress * 100f + "%";
+            yield return null;
+        }
     }
+  
+
 }
+
