@@ -22,12 +22,14 @@ public class LoadingScript : MonoBehaviour
     private void Start()
     {
         loadingCanvas.enabled = true;
-        StartCoroutine(WaitFetchBuildings());
+        StartCoroutine(FetchBuildings());
+        // StartCoroutine(WaitFetchBuildings());
+        StartCoroutine(Wait());
 
     }
 
     //wait loading time for buildings
-    IEnumerator WaitFetchBuildings()
+    IEnumerator Wait()
     {
         yield return new WaitForSeconds(loadingTime);
         loadingCanvas.enabled = false;
