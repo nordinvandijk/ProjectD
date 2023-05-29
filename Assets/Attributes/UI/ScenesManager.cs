@@ -9,8 +9,7 @@ public static class ScenesManager
     public enum SceneEnum
     {
         MainMenu,
-        Loading,
-        Game,
+        Game
     }
 
     public static void LoadScene(SceneEnum scene)

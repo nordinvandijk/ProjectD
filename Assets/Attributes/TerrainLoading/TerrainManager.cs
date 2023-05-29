@@ -36,6 +36,6 @@ public static class TerrainManager
         {
             yield return null;
         }
-        StartGame();
+        // StartGame();
     }
 }
