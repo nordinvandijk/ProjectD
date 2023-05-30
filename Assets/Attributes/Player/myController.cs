@@ -21,9 +21,11 @@ public class myController : MonoBehaviour
     public MeshRenderer rearRightWheelMesh;
 
     public float maxSteeringAngle = 30f;
-    public float motorForce = 1000f;
-    public float brakeForce = 0f;
+    public float motorForce = 1050f;
+    public float brakeForce = 2000f;
     public float steerDecay = 1f;
+
+    public Rigidbody rigidbody;
 
     private void FixedUpdate()
     {
@@ -58,8 +60,8 @@ public class myController : MonoBehaviour
 
     private void HandleMotor()
     {
-        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+        frontLeftWheelCollider.motorTorque = Math.Clamp(verticalInput * motorForce, -200, 1050);
+        frontRightWheelCollider.motorTorque = Math.Clamp(verticalInput * motorForce, -200, 1050);
 
         float brakeTorque = isBreaking ? brakeForce : 0f;
         // Debug.Log(brakeTorque);
