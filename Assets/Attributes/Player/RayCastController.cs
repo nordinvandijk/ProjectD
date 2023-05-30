@@ -39,6 +39,7 @@ public class RayCastController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && isTargeted == false)
         {
             metadataText.text = "";
+
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -61,6 +62,19 @@ public class RayCastController : MonoBehaviour
                 if (selectedBuilding is not null)
                 {
                     metadataText.text += $"Name: {selectedBuilding.Name}\nDescription: {selectedBuilding.Description}\nLongitude: {selectedBuilding.Lon}\nLatitude: {selectedBuilding.Lat}\n\n";
+                    if (selectedBuilding.Image_url is not null)
+                    {
+                        metadataText.text += $"Image: {selectedBuilding.Image_url}\n";
+                    }
+                    if (selectedBuilding.Image is not null)
+                    {
+                        Debug.Log(selectedBuilding.Image);
+                        metadataPanel.GetComponentInChildren<RawImage>().texture = selectedBuilding.Image;
+                        metadataPanel.GetComponentInChildren<RawImage>().enabled = true;
+                        metadataPanel.GetComponentInChildren<AspectRatioFitter>().enabled = true;
+                        metadataPanel.GetComponentInChildren<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+                        
+                    }
                 }
 
                 CesiumMetadata metadata = hit.transform.GetComponentInParent<CesiumMetadata>();

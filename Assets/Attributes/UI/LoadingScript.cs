@@ -23,7 +23,10 @@ public class LoadingScript : MonoBehaviour
     {
         loadingCanvas.enabled = true;
         StartCoroutine(FetchBuildings());
-        // StartCoroutine(WaitFetchBuildings());
+        if (isLoaded)
+        {
+            StartCoroutine(FetchImages());
+        }
         StartCoroutine(Wait());
 
     }

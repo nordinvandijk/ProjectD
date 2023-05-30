@@ -11,7 +11,7 @@ using static ScenesManager;
 public static class TerrainManager
 {
     public static List<Building> buildings;
-    private static bool isLoaded;
+    public static bool isLoaded;
 
     public static IEnumerator FetchBuildings()
     {
@@ -26,7 +26,31 @@ public static class TerrainManager
                 throw new Exception(request.error);
             }
             isLoaded = true;
-            buildings = JsonConvert.DeserializeObject<List<Building>>(request.downloadHandler.text);
+            buildings = JsonConvert.DeserializeObject<List<Building>>(request.downloadHandler.text); 
+            //load image if building.Image_url is not null 
+            
+            
+        }
+    }
+
+    public static IEnumerator FetchImages()
+    {
+        foreach (var building in buildings)
+        {
+            if (building.Image_url == null)
+            {
+                continue;
+            }
+            using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(building.Image_url))
+            {
+                yield return request.SendWebRequest();
+                if (request.result == UnityWebRequest.Result.ConnectionError)
+                {
+                    throw new Exception(request.error);
+                }
+                building.Image = DownloadHandlerTexture.GetContent(request);
+                Debug.Log("Image loaded");
+            }
         }
     }
 
@@ -36,6 +60,6 @@ public static class TerrainManager
         {
             yield return null;
         }
-        // StartGame();
+        StartGame();
     }
 }
