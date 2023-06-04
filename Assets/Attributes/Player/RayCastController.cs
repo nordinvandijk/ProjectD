@@ -23,15 +23,16 @@ public class RayCastController : MonoBehaviour
     public Text description;
     public Text titleExtraDetails;
     public Text descriptionExtraDetails;
-    public Text bagData;
+    public Text bagDataText;
     public RawImage imageDataScreen;
     public RawImage imageBDS;
     public Texture defaultImage;
     private readonly bool isTargeted = false;
 
     private ActiveDataPanel activeDataPanel;
-    private bool buildingIsSelected;
     private GameObject Hit = null;
+
+    private bool isBuildingWithDataSelected;
 
     private void Start()
     {
@@ -51,7 +52,7 @@ public class RayCastController : MonoBehaviour
             description.text = "";
             titleExtraDetails.text = "No title available";
             descriptionExtraDetails.text = "";
-            bagData.text = "";
+            bagDataText.text = "";
             var ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -75,7 +76,7 @@ public class RayCastController : MonoBehaviour
 
                 if (selectedBuilding is not null)
                 {
-                    buildingIsSelected = true;
+                    isBuildingWithDataSelected = true;
                     StartCoroutine(FetchBuildingImage(selectedBuilding.ImageUrl));
                     title.text = selectedBuilding.Name;
                     titleExtraDetails.text = selectedBuilding.Name;
@@ -87,7 +88,7 @@ public class RayCastController : MonoBehaviour
                 }
                 else
                 {
-                    buildingIsSelected = false;
+                    isBuildingWithDataSelected = false;
                 }
 
                 var metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
@@ -100,10 +101,11 @@ public class RayCastController : MonoBehaviour
                     {
                         var propertyValue = feature.GetString(propertyName, "null");
                         if (propertyValue != "null" && propertyValue != "")
-                            bagData.text += "<b>" + propertyName + "</b>" + ": "
-                                            + propertyValue + "\n";
+                            bagDataText.text += "<b>" + propertyName + "</b>" + ": "
+                                                + propertyValue + "\n";
                         if (propertyName == "id")
                         {
+                            StartCoroutine(FetchBagData(propertyValue.Substring(4)));
                             description.text += $"\nid: {propertyValue}";
                             descriptionExtraDetails.text += $"\nid: {propertyValue}";
                         }
@@ -134,7 +136,7 @@ public class RayCastController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C)) activeDataPanel = ActiveDataPanel.None;
 
-        if (buildingIsSelected)
+        if (isBuildingWithDataSelected)
         {
             imageDataScreen.texture = currentBuildingImage;
             imageBDS.texture = currentBuildingImage;
@@ -143,6 +145,12 @@ public class RayCastController : MonoBehaviour
         {
             imageDataScreen.texture = defaultImage;
             imageBDS.texture = defaultImage;
+        }
+
+        if (isBagDataReady)
+        {
+            bagDataText.text += $"\ndocumentnummer: {bagData.pand.documentnummer}";
+            isBagDataReady = false;
         }
     }
 }
