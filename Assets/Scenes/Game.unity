@@ -2780,7 +2780,7 @@ MonoBehaviour:
   description: {fileID: 0}
   titleExtraDetails: {fileID: 0}
   descriptionExtraDetails: {fileID: 0}
-  bagData: {fileID: 0}
+  bagDataText: {fileID: 0}
   imageDataScreen: {fileID: 0}
   imageBDS: {fileID: 0}
   defaultImage: {fileID: 0}
@@ -5488,7 +5488,7 @@ MonoBehaviour:
   description: {fileID: 4861611310363586915}
   titleExtraDetails: {fileID: 1404099446}
   descriptionExtraDetails: {fileID: 384706165}
-  bagData: {fileID: 2010461194}
+  bagDataText: {fileID: 2010461194}
   imageDataScreen: {fileID: 880341123}
   imageBDS: {fileID: 628086158}
   defaultImage: {fileID: 2800000, guid: a8e7e9551eb17e64fbb497dc6af7ce9e, type: 3}
