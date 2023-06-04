@@ -31,7 +31,7 @@ public class LoadingScript : MonoBehaviour
     //wait loading time for buildings
     IEnumerator Wait()
     {
-        yield return new WaitForSeconds(loadingTime);
+        yield return new WaitForSeconds(0);
         loadingCanvas.enabled = false;
     }
 

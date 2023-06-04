@@ -1,101 +1,131 @@
 using System;
 using CesiumForUnity;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using Attributes.Player;
-using UnityEngine.Networking;
-using Newtonsoft.Json;
-using Unity.Mathematics;
 using static TerrainManager;
 
 public class RayCastController : MonoBehaviour
 {
+    public enum ActiveDataPanel
+    {
+        MetadataPanel,
+        ExtraDataPanel,
+        None
+    }
+
     public Camera cam;
-    private bool isTargeted = false;
-    private GameObject Hit = null;
-    public GameObject metadataPanel;
+    public GameObject dataScreen;
+    public GameObject bigDataScreen;
 
     // The text to display the metadata properties.
-    public Text metadataText;
+    public Text title;
+    public Text description;
+    public Text titleExtraDetails;
+    public Text descriptionExtraDetails;
+    public Text bagData;
+    public Image imageDataScreen;
+    public Image imageBDS;
+    private readonly bool isTargeted = false;
 
-    void Start()
+    private ActiveDataPanel activeDataPanel;
+    private GameObject Hit = null;
+
+    private void Start()
     {
-        //UI.SetActive(false);
-
         // Fix the cursor to the center of the screen and hide it.
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (metadataPanel != null)
-        {
-            metadataPanel.SetActive(false);
-        }
+        if (dataScreen != null) dataScreen.SetActive(false);
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0) && isTargeted == false)
         {
-            metadataText.text = "";
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            activeDataPanel = ActiveDataPanel.MetadataPanel;
+            title.text = "No title available";
+            description.text = "";
+            titleExtraDetails.text = "No title available";
+            descriptionExtraDetails.text = "";
+            bagData.text = "";
+            var ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(
-            Camera.main.transform.position,
-            Camera.main.transform.TransformDirection(Vector3.forward),
-            out hit,
-            Mathf.Infinity))
+                    Camera.main.transform.position,
+                    Camera.main.transform.TransformDirection(Vector3.forward),
+                    out hit,
+                    Mathf.Infinity))
             {
-                CesiumGeoreference georeference = hit.transform.GetComponentInParent<CesiumGeoreference>();
-                double3 unityPosition = new double3(hit.transform.position);
-                double3 ecef = georeference.TransformUnityPositionToEarthCenteredEarthFixed(unityPosition);
-                double3 lonLatHeight = CesiumWgs84Ellipsoid.EarthCenteredEarthFixedToLongitudeLatitudeHeight(ecef);
-                double longitude = lonLatHeight.x;
-                double latitude = lonLatHeight.y;
+                var georeference = hit.transform.GetComponentInParent<CesiumGeoreference>();
+                var unityPosition = new double3(hit.transform.position);
+                var ecef = georeference.TransformUnityPositionToEarthCenteredEarthFixed(unityPosition);
+                var lonLatHeight = CesiumWgs84Ellipsoid.EarthCenteredEarthFixedToLongitudeLatitudeHeight(ecef);
+                var longitude = lonLatHeight.x;
+                var latitude = lonLatHeight.y;
 
-                var selectedBuilding = buildings.Find(b => Math.Round(b.Lon, 9, MidpointRounding.ToEven)  == Math.Round(longitude, 9, MidpointRounding.ToEven)
-                                                           && Math.Round(b.Lat, 9, MidpointRounding.ToEven) == Math.Round(latitude, 9, MidpointRounding.ToEven));
+                var selectedBuilding = buildings.Find(b =>
+                    Math.Round(b.Lon, 9, MidpointRounding.ToEven) == Math.Round(longitude, 9, MidpointRounding.ToEven)
+                    && Math.Round(b.Lat, 9, MidpointRounding.ToEven) ==
+                    Math.Round(latitude, 9, MidpointRounding.ToEven));
 
                 if (selectedBuilding is not null)
                 {
-                    metadataText.text += $"Name: {selectedBuilding.Name}\nDescription: {selectedBuilding.Description}\nLongitude: {selectedBuilding.Lon}\nLatitude: {selectedBuilding.Lat}\n\n";
+                    StartCoroutine(FetchBuildingImage(selectedBuilding.ImageUrl));
+                    title.text = selectedBuilding.Name;
+                    titleExtraDetails.text = selectedBuilding.Name;
+                    imageDataScreen.sprite = currentBuildingImage;
+                    imageBDS.sprite = currentBuildingImage;
+                    description.text +=
+                        $"Description: {selectedBuilding.Description}";
+                    descriptionExtraDetails.text +=
+                        $"Description: {selectedBuilding.Description}";
                 }
 
-                CesiumMetadata metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
+                var metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
                 if (metadata != null)
                 {
-                    CesiumFeature[] features = metadata.GetFeatures(hit.transform, hit.triangleIndex);
+                    var features = metadata.GetFeatures(hit.transform, hit.triangleIndex);
                     // List out each metadata property in the UI.
                     foreach (var feature in features)
+                    foreach (var propertyName in feature.properties)
                     {
-                        foreach (var propertyName in feature.properties)
+                        var propertyValue = feature.GetString(propertyName, "null");
+                        if (propertyValue != "null" && propertyValue != "")
+                            bagData.text += "<b>" + propertyName + "</b>" + ": "
+                                            + propertyValue + "\n";
+                        if (propertyName == "id")
                         {
-                            string propertyValue = feature.GetString(propertyName, "null");
-                            if (propertyValue != "null" && propertyValue != "")
-                            {
-                                metadataText.text += "<b>" + propertyName + "</b>" + ": "
-                                                     + propertyValue + "\n";
-                            }
+                            description.text += $"\nid: {propertyValue}";
+                            descriptionExtraDetails.text += $"\nid: {propertyValue}";
                         }
                     }
                 }
             }
-
         }
 
-        if (metadataPanel != null)
+        if (activeDataPanel == ActiveDataPanel.MetadataPanel)
         {
-            metadataPanel.SetActive(metadataText.text.Length > 0);
+            dataScreen.SetActive(true);
+            bigDataScreen.SetActive(false);
         }
 
-        // if (Input.GetMouseButtonDown(1) && Hit != null)
-        // {
-        //     text.text = "";
-        //     Hit.GetComponent<Renderer>().material.color = Color.white;
-        //     isTargeted = false;
-        //     UI.SetActive(false);
-        // }
+        else if (activeDataPanel == ActiveDataPanel.ExtraDataPanel)
+        {
+            dataScreen.SetActive(false);
+            bigDataScreen.SetActive(true);
+        }
+
+        else
+        {
+            dataScreen.SetActive(false);
+            bigDataScreen.SetActive(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.I)) activeDataPanel = ActiveDataPanel.ExtraDataPanel;
+
+        if (Input.GetKeyDown(KeyCode.C)) activeDataPanel = ActiveDataPanel.None;
     }
 }
