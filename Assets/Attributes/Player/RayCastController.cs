@@ -149,6 +149,7 @@ public class RayCastController : MonoBehaviour
 
         if (isBagDataReady)
         {
+            //TODO Bag data mooi weergeven
             bagDataText.text += $"\ndocumentnummer: {bagData.pand.documentnummer}";
             isBagDataReady = false;
         }
