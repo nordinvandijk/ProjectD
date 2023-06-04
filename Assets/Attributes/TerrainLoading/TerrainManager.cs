@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 public static class TerrainManager
 {
     public static List<Building> buildings;
-    public static Sprite currentBuildingImage;
+    public static Texture currentBuildingImage;
     private static bool isLoaded;
 
     public static IEnumerator FetchBuildings()
@@ -34,7 +34,7 @@ public static class TerrainManager
             request.result == UnityWebRequest.Result.ProtocolError ||
             request.result == UnityWebRequest.Result.DataProcessingError) throw new Exception(request.error);
 
-        currentBuildingImage = SpriteFromTexture2D(((DownloadHandlerTexture)request.downloadHandler).texture);
+        currentBuildingImage = ((DownloadHandlerTexture)request.downloadHandler).texture;
     }
 
     private static Sprite SpriteFromTexture2D(Texture2D texture)

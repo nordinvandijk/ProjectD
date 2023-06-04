@@ -24,11 +24,13 @@ public class RayCastController : MonoBehaviour
     public Text titleExtraDetails;
     public Text descriptionExtraDetails;
     public Text bagData;
-    public Image imageDataScreen;
-    public Image imageBDS;
+    public RawImage imageDataScreen;
+    public RawImage imageBDS;
+    public Texture defaultImage;
     private readonly bool isTargeted = false;
 
     private ActiveDataPanel activeDataPanel;
+    private bool buildingIsSelected;
     private GameObject Hit = null;
 
     private void Start()
@@ -73,15 +75,19 @@ public class RayCastController : MonoBehaviour
 
                 if (selectedBuilding is not null)
                 {
+                    buildingIsSelected = true;
                     StartCoroutine(FetchBuildingImage(selectedBuilding.ImageUrl));
                     title.text = selectedBuilding.Name;
                     titleExtraDetails.text = selectedBuilding.Name;
-                    imageDataScreen.sprite = currentBuildingImage;
-                    imageBDS.sprite = currentBuildingImage;
+
                     description.text +=
                         $"Description: {selectedBuilding.Description}";
                     descriptionExtraDetails.text +=
                         $"Description: {selectedBuilding.Description}";
+                }
+                else
+                {
+                    buildingIsSelected = false;
                 }
 
                 var metadata = hit.transform.GetComponentInParent<CesiumMetadata>();
@@ -127,5 +133,16 @@ public class RayCastController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I)) activeDataPanel = ActiveDataPanel.ExtraDataPanel;
 
         if (Input.GetKeyDown(KeyCode.C)) activeDataPanel = ActiveDataPanel.None;
+
+        if (buildingIsSelected)
+        {
+            imageDataScreen.texture = currentBuildingImage;
+            imageBDS.texture = currentBuildingImage;
+        }
+        else
+        {
+            imageDataScreen.texture = defaultImage;
+            imageBDS.texture = defaultImage;
+        }
     }
 }
