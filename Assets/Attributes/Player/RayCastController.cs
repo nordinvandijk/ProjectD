@@ -9,9 +9,9 @@ public class RayCastController : MonoBehaviour
 {
     public enum ActiveDataPanel
     {
+        None,
         MetadataPanel,
-        ExtraDataPanel,
-        None
+        ExtraDataPanel
     }
 
     public Camera cam;
