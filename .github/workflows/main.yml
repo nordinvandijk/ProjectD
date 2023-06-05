@@ -15,23 +15,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
+          fetch-depth: 0
           lfs: true
 
       # Cache
       - uses: actions/cache@v2
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-StandaloneWindows64
           restore-keys: |
             Library-
 
-      # Test
-    #   - name: Run tests
-    #     uses: game-ci/unity-test-runner@v2
-    #     env:
-    #       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-    #     with:
-    #       githubToken: ${{ secrets.GITHUB_TOKEN }}
+      # Tests go here in the future
 
       # Build
       - name: Build project
