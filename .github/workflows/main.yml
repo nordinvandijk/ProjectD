@@ -1,0 +1,46 @@
+name: Actions 😎
+
+on:
+    workflow_dispatch: {}
+    # push:
+    #   branches:
+    #     - main
+
+jobs:
+  build:
+    name: Build my project ✨
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-StandaloneWindows64
+          restore-keys: |
+            Library-
+
+      # Tests go here in the future
+
+      # Build
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: StandaloneWindows64
+          allowDirtyBuild: true
+          
+      # Output
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: build

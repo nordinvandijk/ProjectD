@@ -169,4 +169,5 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,unity,macos,windows,linux
 
-.fake
+.idea
+.vscode
