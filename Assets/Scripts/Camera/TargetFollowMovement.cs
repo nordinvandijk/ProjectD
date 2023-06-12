@@ -9,7 +9,7 @@ namespace Camera
         public float mouseSensitivity;
         public float rotationPower = 3f;
         public float rotationLerp = 0.5f;
-        public Canvas recticle;
+        public GameObject recticle;
 
         public GameObject driveCamera;
         public GameObject aimCamerara;
@@ -34,11 +34,11 @@ namespace Camera
                 if (isAiming)
                 {
                     target.rotation = car.rotation;
-                    recticle.enabled = false;
+                    recticle.SetActive(false);
                 }
                 else
                 {
-                    recticle.enabled = true;
+                    recticle.SetActive(true);
                 }
 
                 isAiming = !isAiming;

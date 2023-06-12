@@ -2324,7 +2324,7 @@ MonoBehaviour:
   mouseSensitivity: 100
   rotationPower: 3
   rotationLerp: 0.5
-  recticle: {fileID: 1666017894}
+  recticle: {fileID: 1549354708}
   driveCamera: {fileID: 561865406}
   aimCamerara: {fileID: 772981543}
 --- !u!1 &1195561040
@@ -3027,7 +3027,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1549354709
 RectTransform:
   m_ObjectHideFlags: 0
