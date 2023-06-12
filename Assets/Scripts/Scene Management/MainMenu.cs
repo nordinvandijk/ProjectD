@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Scene_Management
 {
@@ -13,8 +12,7 @@ namespace Scene_Management
 
         public void PlayGame()
         {
-            //load scene called Game
-            SceneManager.LoadScene("Game");
+            ScenesManager.StartGame();
         }
 
         public void QuitGame()

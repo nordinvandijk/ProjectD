@@ -63,11 +63,5 @@ namespace Api
                 isBagDataReady = true;
             }
         }
-
-        public static IEnumerator WaitFetchBuildings()
-        {
-            while (!_areBuildingsFetched) yield return null;
-            // StartGame();
-        }
     }
 }
