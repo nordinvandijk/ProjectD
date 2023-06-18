@@ -74,10 +74,13 @@ namespace Player
             steerAngle += horizontalInput;
             if (horizontalInput == 0)
             {
-                if (steerAngle > 0) steerAngle -= steerDecay;
+                if (steerAngle > 0) {
+                    var temp = steerAngle - steerDecay;
+                    steerAngle = temp < 0 ? 0 : temp; 
+                }
                 if (steerAngle < 0) steerAngle += steerDecay;
             }
-
+            
             steerAngle = Math.Clamp(steerAngle, -maxSteeringAngle, maxSteeringAngle);
             frontLeftWheelCollider.steerAngle = steerAngle;
             frontRightWheelCollider.steerAngle = steerAngle;
