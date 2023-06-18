@@ -15,6 +15,8 @@ namespace Player
         public MeshRenderer rearLeftWheelMesh;
         public MeshRenderer rearRightWheelMesh;
 
+        public GameMenuController gameMenuController;
+
         public float maxSteeringAngle = 30f;
         public float motorForce = 1050f;
         public float brakeForce = 2000f;
@@ -128,6 +130,10 @@ namespace Player
             }
 
             if (speed > 260) {
+                _audioSource.pitch = 0;
+            }
+
+            if (GameMenuController.GameIsPaused) {
                 _audioSource.pitch = 0;
             }
         }
