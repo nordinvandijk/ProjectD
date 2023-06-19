@@ -4578,6 +4578,7 @@ MonoBehaviour:
   player1: {fileID: 6301679752699413378}
   player2: {fileID: 6849265774736209520}
   aimCamera: {fileID: 772981543}
+  recticle: {fileID: 1549354708}
   UI: {fileID: 1666017894}
 --- !u!4 &1486519198
 Transform:
@@ -4834,7 +4835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1099724583680147136}
-  dataPanelManager: {fileID: 0}
+  dataPanelManager: {fileID: 1666017896}
 --- !u!1 &1549354708
 GameObject:
   m_ObjectHideFlags: 0
