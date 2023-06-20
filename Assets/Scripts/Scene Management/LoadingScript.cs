@@ -8,9 +8,11 @@ namespace Scene_Management
     public class LoadingScript : MonoBehaviour
     {
         public Canvas loadingCanvas;
+        public static bool isLoaded;
 
         private void Start()
         {
+            isLoaded = false;
             loadingCanvas.enabled = true;
             StartCoroutine(FetchBuildings());
             StartCoroutine(Wait());
@@ -18,8 +20,9 @@ namespace Scene_Management
 
         //wait loading time for buildings
         private IEnumerator Wait()
-        {
+        {   
             yield return new WaitForSeconds(10);
+            isLoaded = true;
             loadingCanvas.enabled = false;
         }
     }

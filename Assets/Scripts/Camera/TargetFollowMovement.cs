@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player;
 
 namespace Camera
 {
@@ -14,7 +15,7 @@ namespace Camera
         public GameObject driveCamera;
         public GameObject aimCamerara;
 
-        private bool isAiming;
+        public static bool isAiming;
 
         //private float xRotationCamera = 0f;
         private Quaternion nextRotation;
@@ -31,27 +32,21 @@ namespace Camera
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (isAiming)
+                if (SwitchPlayer.isAiming)
                 {
                     target.rotation = car.rotation;
-                    recticle.SetActive(false);
-                }
-                else
-                {
-                    recticle.SetActive(true);
-                }
-
-                isAiming = !isAiming;
+                }               
+                SwitchPlayer.isAiming = !SwitchPlayer.isAiming;
             }
         }
 
         // Fixed Update is called once per specific rate
         private void FixedUpdate()
         {
-            aimCamerara.SetActive(isAiming);
-            driveCamera.SetActive(!isAiming);
+            aimCamerara.SetActive(SwitchPlayer.isAiming);
+            driveCamera.SetActive(!SwitchPlayer.isAiming);
 
-            if (isAiming)
+            if (SwitchPlayer.isAiming)
             {
                 var mouseHorizontal = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
                 var mouseVertical = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
