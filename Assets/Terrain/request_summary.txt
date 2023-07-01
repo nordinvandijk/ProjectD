@@ -1,0 +1,42 @@
+﻿##Export summary details##
+
+Job start time: 2023-07-01 17:29:19 (GMT)
+Export version: 5.2.1
+Exort Description: 
+
+##Request Filter##
+
+Feature selection method: Polygon
+Request area coordinates: 92661.04077973652,436996.8236034723;92734.26538927187,436797.9078491278;92726.84327745214,436381.55200243485;92405.46049691187,436286.4092319134;92166.17122811341,436840.6276801126
+Feature GML ID list:  
+
+##Feature Information##
+
+CityGML feature type(s) : 26
+Selected LOD: haLoD
+Include generic attributes: No
+
+##Appearence information##
+
+Use textures: No
+Texture appreance theme: Rotterdam
+
+##Terrain details##
+
+Export terrain: No
+URL to terrain: 
+Terrain level: MAX
+Texture terrain: No
+Terrain texture type:  
+Terrain texture level 
+URL to TMS: 
+URL to WMS: 
+
+##Output details##
+
+Export Format(s) : "OBJ"
+Coordinate System (if not local): EPSG:28992
+Move to local coordinate system : No
+Tile output: 0
+Height mode: absolute
+

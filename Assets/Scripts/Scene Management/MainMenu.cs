@@ -15,6 +15,11 @@ namespace Scene_Management
             ScenesManager.StartGame();
         }
 
+        public void PlayGame2()
+        {
+            SceneManager.LoadScene(2);            
+        }
+
         public void QuitGame()
         {
             Application.Quit();
